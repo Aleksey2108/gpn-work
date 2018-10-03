@@ -1,166 +1,262 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from openpyxl import load_workbook
 import os
 from app import app
 
 
 
-@app.route('/')
-@app.route('/ongoz')
+@app.route('/' , methods=['GET', 'POST'])
 def home():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       },
-       {
-            'name' : u'Разовые',
-            'url' : '/single'
-       },
-       {
-            'name' : u'Еженедельные',
-            'url' : '/weekly'
-       },
-       {
-            'name' : u'Ежемесячные',
-            'url' : '/monthly'
-       },
-       {
-            'name' : u'Ежеквартальные',
-            'url' : '/quarterly'
-       },
-       {
-            'name' : u'Полугодичные',
-            'url' : '/semi-annual'
-       },
-       {
-            'name' : u'Годовые',
-            'url' : '/annual'
-       },
-       {
-            'name' : u'Журнал проверок',
-            'url' : '/audit-trail'
-       },
-       {
-            'name' : u'Журнал объектов',
-            'url' : '/object-log'
-       },
-       {
-            'name' : u'Журнал административной практики',
-            'url' : '/journal-admp'
-       },
+   return render_template('home.html',  title='Home')
 
-   ]
+@app.route('/select_report' , methods=['GET', 'POST'])
+def select_report():
 
-   return render_template('home.html',  title='Home' , strings = strings)
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
+
+     strings = [
+         {
+              'name' : u'ОНГОЗНТЧС',
+              'url' : '/ongoz'
+         },
+         {
+              'name' : u'Разовые',
+              'url' : '/single'
+         },
+         {
+              'name' : u'Еженедельные',
+              'url' : '/weekly'
+         },
+         {
+              'name' : u'Ежемесячные',
+              'url' : '/monthly'
+         },
+         {
+              'name' : u'Ежеквартальные',
+              'url' : '/quarterly'
+         },
+         {
+              'name' : u'Полугодичные',
+              'url' : '/semi-annual'
+         },
+         {
+              'name' : u'Годовые',
+              'url' : '/annual'
+         },
+         {
+              'name' : u'Журнал проверок',
+              'url' : '/audit-trail'
+         },
+         {
+              'name' : u'Журнал объектов',
+              'url' : '/object-log'
+         },
+         {
+              'name' : u'Журнал административной практики',
+              'url' : '/journal-admp'
+         },
+         {
+              'name' : u'Назад',
+              'url' : '/'
+         },
+     ]
+
+   return render_template('select_report.html',  title='Select Report', depart_id = post , strings = strings)
+
+@app.route('/ongoz', methods=['GET', 'POST'])
+def ongoz():
+
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
+
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }   
+     ]
+  
+   return render_template('report.html',  title='Ongoz', depart_id = post , strings = strings)
 
 
-@app.route('/single')
+@app.route('/single' , methods=['GET', 'POST'])
 def single():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }   
-   ]
-  
-   return render_template('home.html',  title='Single', strings = strings)
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-@app.route('/weekly')
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }   
+     ]
+  
+   return render_template('report.html',  title='Single', depart_id = post , strings = strings)
+
+@app.route('/weekly' , methods=['GET', 'POST'])
 def weekly():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='weekly', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/monthly')
+   return render_template('report.html',  title='weekly', depart_id = post , strings = strings)
+
+@app.route('/monthly' , methods=['GET', 'POST'])
 def monthly():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='monthly', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/quarterly')
+   return render_template('report.html',  title='monthly', depart_id = post , strings = strings)
+
+@app.route('/quarterly' , methods=['GET', 'POST'])
 def quarterly():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='quarterly', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/semi-annual')
+   return render_template('report.html',  title='quarterly', depart_id = post , strings = strings)
+
+@app.route('/semi-annual' , methods=['GET', 'POST'])
 def semi_annual():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='semi-annual', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/annual')
+   return render_template('report.html',  title='semi-annual', depart_id = post , strings = strings)
+
+@app.route('/annual' , methods=['GET', 'POST'])
 def annual():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='Annual', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/audit-trail')
+   return render_template('report.html',  title='Annual', depart_id = post , strings = strings)
+
+@app.route('/audit-trail' , methods=['GET', 'POST'])
 def audit_trail():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='Audit trail', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/object-log')
+   return render_template('report.html',  title='Audit trail', depart_id = post , strings = strings)
+
+@app.route('/object-log' , methods=['GET', 'POST'])
 def object_log():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='Object Log', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
 
-@app.route('/journal-admp')
+   return render_template('report.html',  title='Object Log', depart_id = post , strings = strings)
+
+@app.route('/journal-admp' , methods=['GET', 'POST'])
 def journal_admp():
 
-   strings = [
-       {
-            'name' : u'ОНГОЗНТЧС',
-            'url' : '/ongoz'
-       }
-   ]
+   try:
+      request.form['depart_id']
+   except NameError:
+      return redirect(url_for('home'))
+   else:
+     post = request.form['depart_id']
 
-   return render_template('home.html',  title='Journal admin', strings = strings)
+     strings = [
+         {
+              'name' : u'Назад',
+              'url' : url_for('select_report')
+         }
+     ]
+
+   return render_template('report.html',  title='Journal admin', depart_id = post , strings = strings)
