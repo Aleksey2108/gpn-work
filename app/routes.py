@@ -9,7 +9,54 @@ from app import app
 @app.route('/' , methods=['GET', 'POST'])
 def home():
 
-   return render_template('home.html',  title='Home')
+     strings = [
+         {
+              'name' : u'УНПР',
+              'id' : 'unpr'
+         },
+         {
+              'name' : u'НТО',
+              'id' : 'nto'
+         },
+         {
+              'name' : u'ОНБП',
+              'id' : 'onbp'
+         },
+         {
+              'name' : u'ОНГОЗНТЧС',
+              'id' : 'ongozntchs'
+         },
+         {
+              'name' : u'ОГСД',
+              'id' : 'ogsd'
+         },
+         {
+              'name' : u'ООРД',
+              'id' : 'oord'
+         },
+         {
+              'name' : u'ОЛК',
+              'id' : 'olk'
+         },
+         {
+              'name' : u'ОНОВПО',
+              'id' : 'onovpo'
+         },
+         {
+              'name' : u'ОНТ',
+              'id' : 'ont'
+         },
+         {
+              'name' : u'ОПД',
+              'id' : 'opd'
+         },
+         {
+              'name' : u'РОНПР',
+              'id' : 'ronpr'
+         },
+     ]
+
+     return render_template('home.html',  title='Home', strings = strings)
 
 @app.route('/select_report' , methods=['GET', 'POST'])
 def select_report():
