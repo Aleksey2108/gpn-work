@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-depart_id =  {{depart_id}}
+<div class="btn btn-group btn-group-vertical btn-block" style="width: 250px;">
     {% for string in strings %}
-    <p>
-      <form action="{{url_for('select_report')}}" method="post">
-        <input type="hidden" name="depart_id" value="{{string.id}}" />
-        <button>{{string.name}}</button>
+      <form action="{{url_for('select_report')}}" style="margin: 5px 0px;width: 200px;border-style: solid;border-width: 1px;" method="post">
+        <input type="hidden" style="float: left;"  name="depart_id" value="{{string.id}}" />
+        <button class="btn btn-secondary btn-block" ><strong>{{string.name}}</strong></button>
       </form>
-   </p>
     {% endfor %}
+</div>
 {% endblock %}
