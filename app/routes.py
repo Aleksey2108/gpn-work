@@ -1,60 +1,16 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, flash, redirect, url_for, request
-from openpyxl import load_workbook
 import os
 from app import app
+from app.xls_gen import ProfTheEventXml
+from app.function import GetDepartment
 
 
 
 @app.route('/' , methods=['GET', 'POST'])
 def home():
-
-     strings = [
-         {
-              'name' : u'УНПР',
-              'id' : 'unpr'
-         },
-         {
-              'name' : u'НТО',
-              'id' : 'nto'
-         },
-         {
-              'name' : u'ОНБП',
-              'id' : 'onbp'
-         },
-         {
-              'name' : u'ОНГОЗНТЧС',
-              'id' : 'ongozntchs'
-         },
-         {
-              'name' : u'ОГСД',
-              'id' : 'ogsd'
-         },
-         {
-              'name' : u'ООРД',
-              'id' : 'oord'
-         },
-         {
-              'name' : u'ОЛК',
-              'id' : 'olk'
-         },
-         {
-              'name' : u'ОНОВПО',
-              'id' : 'onovpo'
-         },
-         {
-              'name' : u'ОНТ',
-              'id' : 'ont'
-         },
-         {
-              'name' : u'ОПД',
-              'id' : 'opd'
-         },
-         {
-              'name' : u'РОНПР',
-              'id' : 'ronpr'
-         },
-     ]
+     depart_id = 'null'
+     strings = GetDepartment(depart_id)
 
      return render_template('home.html',  title='Home', strings = strings)
 
@@ -68,10 +24,12 @@ def select_report():
    else:
      post = request.form['depart_id']
 
+     depart_name = GetDepartment(post)
+
      strings = [
          {
-              'name' : u'ОНГОЗНТЧС',
-              'url' : '/ongoz'
+              'name' : depart_name,
+              'url' : '/'
          },
          {
               'name' : u'Разовые',
@@ -106,12 +64,8 @@ def select_report():
               'url' : '/object-log'
          },
          {
-              'name' : u'Журнал административной практики',
+              'name' : u'Журнал админ. практики',
               'url' : '/journal-admp'
-         },
-         {
-              'name' : u'Назад',
-              'url' : '/'
          },
      ]
 
@@ -145,6 +99,8 @@ def single():
    except NameError:
       return redirect(url_for('home'))
    else:
+
+     file = ProfTheEventXml()
      post = request.form['depart_id']
 
      strings = [
