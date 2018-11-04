@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-  {{depart_id}}
-    {% for string in strings %}
-    <p><a href="{{string.url}}">{{string.name}}</a></p>
-    {% endfor %}
-{% endblock %}
