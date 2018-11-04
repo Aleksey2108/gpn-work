@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Журнал_проверок</h1>
+    <form action="/add-audit-trail" method="post">
+     <input type="hidden" name="depart_id" value="{{depart_id}}" />
+    {{form.hidden_tag()}}
+    {{ form.objectname.label }}<br>
+    {{ form.objectname }}<br>
+
+        {% for error in form.errors.objectname %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+
+    {{ form.objectadres.label }}<br>
+    {{ form.objectadres}}<br>
+
+        {% for error in form.errors.objectname %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+
+    {{ form.checkdate.label }}<br>
+    {{ form.checkdate }}<br>
+
+        {% for error in form.errors.checkdate %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+
+    {{ form.of_violations.label }}<br>
+    {{ form.of_violations (value='0') }}<br>
+
+        {% for error in form.errors.of_violations %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+
+
+    {{ form.of_violations_unscheduled.label }}<br>
+    {{ form.of_violations_unscheduled (value='0')}}<br>
+
+        {% for error in form.errors.of_violations %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+
+    {{ form.fixed_violations.label }}<br>
+    {{ form.fixed_violations (value='0')}}<br>
+
+        {% for error in form.errors.of_violations %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+
+    {{ form.other_documents.label }}<br>
+    {{ form.other_documents }}<br>
+
+    {{ form.check_number.label }}<br>
+    {{ form.check_number }}<br>
+
+
+        {{ form.submit() }}   
+
+         </form>
+
+         <form action="{{url_for('select_report')}}"   method="post">
+         <input type="hidden" style="float: left;" name="depart_id" value="{{depart_id}}" />
+         <button  type="submit">Назад</strong>
+         </form><br>
+   
+
+{% endblock %}

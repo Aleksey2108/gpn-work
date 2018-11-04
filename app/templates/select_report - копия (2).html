@@ -5,7 +5,7 @@
     {% for string in strings %}
       <form action="{{string.url}}" style="margin: 5px 0px;width: 240px;border-style: solid;border-width: 1px;">
         <input type="hidden" style="float: left;" name="depart_id" value="{{depart_id}}" />
-        <button class="btn btn-secondary btn-block" type="submit" ><strong>{{string.name}}</strong></button>
+        <button class="btn btn-secondary btn-block" name="depart_id" value="{{depart_id}}" type="submit" ><strong>{{string.name}}</strong></button>
       </form>
     {% endfor %}
 </div>
