@@ -6,6 +6,7 @@ depart_id =  {{depart_id}}
     <p>
       <form action="{{string.url}}" style="margin: 5px 0px; width: 240px; border-style: solid; border-width: 1px;" {% if string.method == 'post' %} method="post" {% endif %}>
         <input type="hidden" style="float: left;" name="depart_id" value="{{depart_id}}" />
+        {% if string.action %}<input type="hidden" style="float: left;" name="action" value="{{string.action}}" />{% endif %}
         <button class="btn btn-secondary btn-block"  type="submit"><strong>{{string.name}}</strong></button>
       </form>
     </p>

@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Выберите период отчета</h1>
-    <form action="/load_audit_trail" method="post">
+    <form action="/load-audit-trail-{{action}}" method="post">
      <input type="hidden" name="depart_id" value="{{depart_id}}" />
     {{form.hidden_tag()}}
      Начальная дата: 
@@ -30,8 +30,9 @@
 
          </form>
 
-         <form action="{{url_for('select_report')}}"   method="post">
+         <form action="{{url_for('audit_trail')}}" >
          <input type="hidden" style="float: left;" name="depart_id" value="{{depart_id}}" />
+         <input type="hidden" style="float: left;" name="action" value="{{action}}" />
          <button  type="submit">Назад</strong>
          </form><br>
    
