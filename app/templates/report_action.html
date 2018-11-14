@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-depart_id =  {{depart_id}}
+<div class="content_1">
     {% for string in strings %}
     <p>
       <form action="{{string.url}}" style="margin: 5px 0px; width: 240px; border-style: solid; border-width: 1px;" {% if string.method == 'post' %} method="post" {% endif %}>
@@ -11,4 +11,5 @@ depart_id =  {{depart_id}}
       </form>
     </p>
     {% endfor %}
+</div>
 {% endblock %}

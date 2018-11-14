@@ -260,9 +260,10 @@ def CheckLastDay(day, month, year):
 
 def CreateAuditTrailXls_CHS(start_date, end_date):
 
-    row =  AuditTrail.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+# !!  В запрос необходимо добавить условие выбора по отделу !!
+    rows =  AuditTrail_CHS.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
     
-    if row:
+    if rows:
       wb = Workbook()
 #      ws1 = wb.active
       ws1 = wb.worksheets[0] 
@@ -386,7 +387,7 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
       ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
       ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
 
-      rows =  AuditTrail_CHS.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+
       ws2['A2'] = u"№ п/п"
       ws2['A2'].alignment = align_center1
       ws2['A2'].font = font5
@@ -606,7 +607,7 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
          ws2.cell(row=key, column=13).border = border
 
 
-         ws2.cell(row=key, column=14).value = row.depart_id
+         ws2.cell(row=key, column=14).value = row.depart_name
          ws2.cell(row=key, column=14).font = font4
          ws2.cell(row=key, column=14).alignment = align_center1
          ws2.cell(row=key, column=14).border = border
@@ -690,19 +691,14 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
 
       now = datetime.datetime.now()
 
-      print 'Folder =' + app.config['UPLOAD_FOLDER']
+#      print 'Folder =' + app.config['UPLOAD_FOLDER']
       filename = 'svao1_chs_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
-#      dest_filename = app.config['UPLOAD_FOLDER']+'/svao1_chs_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
+#      dest_filename = 'svao1_chs_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
       dest_filename ='%s/%s'  % (app.config['UPLOAD_FOLDER'], filename)
 
-      print 'dest_filename = ' + dest_filename 
-
-#      dest_filename = 'svao1_chs_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
-#         dest_filename = 'empty_book.xlsx'
-
       wb.save(filename = dest_filename)
-#      webbrowser.open(url_for('download_file', filename = filename) , new=1)
-      return redirect(url_for('download_file', filename = filename))
+
+      return filename
 
     else:
       result = 'error'
@@ -710,9 +706,10 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
 
 def CreateAuditTrailXls_GO(start_date, end_date):
 
-    row =  AuditTrail.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+# !!  В запрос необходимо добавить условие выбора по отделу !! 
+    rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
     
-    if row:
+    if rows:
       wb = Workbook()
 #      ws1 = wb.active
       ws1 = wb.worksheets[0] 
@@ -836,7 +833,7 @@ def CreateAuditTrailXls_GO(start_date, end_date):
       ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
       ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
 
-      rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+#      rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
       ws2['A2'] = u"№ п/п"
       ws2['A2'].alignment = align_center1
       ws2['A2'].font = font5
@@ -1071,7 +1068,7 @@ def CreateAuditTrailXls_GO(start_date, end_date):
          ws2.cell(row=key, column=14).border = border
 
 
-         ws2.cell(row=key, column=15).value = row.depart_id
+         ws2.cell(row=key, column=15).value = row.depart_name
          ws2.cell(row=key, column=15).font = font4
          ws2.cell(row=key, column=15).alignment = align_center1
          ws2.cell(row=key, column=15).border = border
@@ -1152,12 +1149,8 @@ def CreateAuditTrailXls_GO(start_date, end_date):
       filename = 'svao1_go_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
       dest_filename ='%s/%s'  % (app.config['UPLOAD_FOLDER'], filename)
 
-
-#      dest_filename = 'svao1_go_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
-
       wb.save(filename = dest_filename)
-#      webbrowser.open(url_for('download_file', filename = filename) , new=1)
-#      return redirect(url_for('download_file', filename = filename))
+      return filename
 
     else:
       result = 'error'
@@ -1165,9 +1158,10 @@ def CreateAuditTrailXls_GO(start_date, end_date):
 
 def CreateAuditTrailXls_PB(start_date, end_date):
 
-    row =  AuditTrail.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+# !!  В запрос необходимо добавить условие выбора по отделу !! 
+    rows =  AuditTrail_PB.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
     
-    if row:
+    if rows:
       wb = Workbook()
 #      ws1 = wb.active
       ws1 = wb.worksheets[0] 
@@ -1291,7 +1285,7 @@ def CreateAuditTrailXls_PB(start_date, end_date):
       ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
       ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
 
-      rows =  AuditTrail_PB.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+
       ws2['A2'] = u"№ п/п"
       ws2['A2'].alignment = align_center1
       ws2['A2'].font = font5
@@ -1526,7 +1520,7 @@ def CreateAuditTrailXls_PB(start_date, end_date):
          ws2.cell(row=key, column=14).border = border
 
 
-         ws2.cell(row=key, column=15).value = row.depart_id
+         ws2.cell(row=key, column=15).value = row.depart_name
          ws2.cell(row=key, column=15).font = font4
          ws2.cell(row=key, column=15).alignment = align_center1
          ws2.cell(row=key, column=15).border = border
@@ -1607,13 +1601,8 @@ def CreateAuditTrailXls_PB(start_date, end_date):
       filename = 'svao1_pb_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
       dest_filename ='%s/%s'  % (app.config['UPLOAD_FOLDER'], filename)
 
-
-#      dest_filename = 'svao1_pb_' +str(now.year)+'-'+str(now.month)+'-'+str(now.day)+'_'+str(now.hour)+'-'+str(now.minute)+'-'+str(now.second)+'.xlsx'
-
       wb.save(filename = dest_filename)
-#      webbrowser.open(url_for('download_file', filename = filename) , new=1)
-#      return redirect(url_for('download_file', filename = filename))
-
+      return filename
     else:
       result = 'error'
       return result

@@ -33,11 +33,10 @@ class AuditTrail_CHS(db.Model):
     fixed_violations = db.Column(db.SmallInteger, default = 0)
     name_employee = db.Column(db.String(512), default = '')
     check_number = db.Column(db.SmallInteger, default = '')
-    depart_name = db.Column(db.String(64), default = '')
+
     
     def __repr__(self):
-       return '<AuditTrail_CHS {}>'.format(self.depart_id)  
-
+       return '<AuditTrail_CHS {}>'.format(self.depart_id)
     
 class AuditTrail_GO(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -59,7 +58,6 @@ class AuditTrail_GO(db.Model):
     name_employee = db.Column(db.String(512), default = '')
     other_documents = db.Column(db.String(), default = '')
     check_number = db.Column(db.SmallInteger, default = '')
-    depart_name = db.Column(db.String(64), default = '')
 
     def __repr__(self):
        return '<AuditTrail_GO {}>'.format(self.depart_id)
@@ -82,9 +80,7 @@ class AuditTrail_PB(db.Model):
     of_violations_unscheduled = db.Column(db.SmallInteger, default = 0)
     fixed_violations = db.Column(db.SmallInteger, default = 0)
     name_employee = db.Column(db.String(512), default = '')
-    other_documents = db.Column(db.String(), default = '')
     check_number = db.Column(db.SmallInteger, default = '')
-    depart_name = db.Column(db.String(64), default = '')
 
     def __repr__(self):
        return '<AuditTrail_PB {}>'.format(self.depart_id)

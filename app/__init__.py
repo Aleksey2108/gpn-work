@@ -7,7 +7,9 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 
-UPLOAD_FOLDER = "app/uploads"
+#UPLOAD_FOLDER = "app/static/uploads"
+#UPLOAD_FOLDER = os.path.abspath(os.path.dirname(__file__))+"\static\uploads"
+UPLOAD_FOLDER = os.path.abspath(os.path.dirname(__file__))+"/static/uploads"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 

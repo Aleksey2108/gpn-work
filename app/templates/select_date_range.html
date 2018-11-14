@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="content_1">
     <h1>Выберите период отчета</h1>
     <form action="/load-audit-trail-{{action}}" method="post">
      <input type="hidden" name="depart_id" value="{{depart_id}}" />
@@ -36,5 +37,5 @@
          <button  type="submit">Назад</strong>
          </form><br>
    
-
+</div>
 {% endblock %}

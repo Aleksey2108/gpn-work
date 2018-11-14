@@ -11,8 +11,7 @@
          <link href="/static/css/style.css" rel="stylesheet">
     </head>
     <body>
-      <div class="view">
-
+     <div class="messages"
         <hr>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -23,7 +22,7 @@
         </ul>
         {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
       </div>
+        {% block content %}{% endblock %}
     </body>
 </html>

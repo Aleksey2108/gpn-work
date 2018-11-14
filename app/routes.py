@@ -339,7 +339,7 @@ def add_audit_trail_go():
              add_data = AuditTrail_GO (
                objectname = form.objectname.data,
                objectadres = form.objectadres.data,
-               depart_id = GetDepartment(depart_id),
+               depart_id = depart_id,
                doc_stored = GetDepartment(form.doc_stored.data),
                checkdate = datetime.datetime.now(),
                type_inspection = type_inspection_t,
@@ -355,6 +355,7 @@ def add_audit_trail_go():
                name_employee = u'Иванов Иван',
                other_documents = form.other_documents.data,
                check_number =  form.check_number.data,
+               depart_name = GetDepartment(depart_id),
              )
              db.session.add(add_data)
              db.session.commit()
@@ -389,10 +390,12 @@ def load_audit_trail_go():
       if end_date < start_date:
          error = u'Конечная дата не может быть меньше начальной!'
          print 'error'
-         return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , error = error, form = form)
+         return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , action = 'go', error = error, form = form)
       result = CreateAuditTrailXls_GO(start_date, end_date)
       if result == 'error':
         error = u'Нет данных за выбранный период'
+      else:      
+        return redirect(url_for('download_file', filename = result))
       return redirect(url_for('audit_trail')+'?depart_id='+ depart_id)
    return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , action = 'go' , form = form)
 
@@ -425,7 +428,7 @@ def add_audit_trail_pb():
              add_data = AuditTrail_PB (
                objectname = form.objectname.data,
                objectadres = form.objectadres.data,
-               depart_id = GetDepartment(depart_id),
+               depart_id = depart_id,
                doc_stored = GetDepartment(form.doc_stored.data),
                checkdate = datetime.datetime.now(),
                type_inspection = type_inspection_t,
@@ -441,6 +444,7 @@ def add_audit_trail_pb():
                name_employee = u'Иванов Иван',
                other_documents = form.other_documents.data,
                check_number =  form.check_number.data,
+               depart_name = GetDepartment(depart_id),
              )
              db.session.add(add_data)
              db.session.commit()
@@ -476,10 +480,12 @@ def load_audit_trail_pb():
       if end_date < start_date:
          error = u'Конечная дата не может быть меньше начальной!'
          print 'error'
-         return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , error = error, form = form)
+         return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , action = 'pb' , error = error,  form = form)
       result = CreateAuditTrailXls_PB(start_date, end_date)
       if result == 'error':
         error = u'Нет данных за выбранный период'
+      else:      
+        return redirect(url_for('download_file', filename = result))
       return redirect(url_for('audit_trail')+'?depart_id='+ depart_id)
    return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id ,  action = 'pb' ,  form = form)
 
@@ -512,7 +518,7 @@ def add_audit_trail_chs():
              add_data = AuditTrail_CHS (
                objectname = form.objectname.data,
                objectadres = form.objectadres.data,
-               depart_id = GetDepartment(depart_id),
+               depart_id = depart_id,
                doc_stored = GetDepartment(form.doc_stored.data),
                checkdate = datetime.datetime.now(),
                type_inspection = type_inspection_t,
@@ -527,6 +533,7 @@ def add_audit_trail_chs():
                fixed_violations = form.fixed_violations.data,
                name_employee = u'Иванов Иван',
                check_number =  form.check_number.data,
+               depart_name = GetDepartment(depart_id)
              )
              db.session.add(add_data)
              db.session.commit()
@@ -563,10 +570,12 @@ def load_audit_trail_chs():
       if end_date < start_date:
          error = u'Конечная дата не может быть меньше начальной!'
          print 'error'
-         return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , error = error, form = form)
+         return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , action = 'chs', error = error, form = form)
       result = CreateAuditTrailXls_CHS(start_date, end_date)
       if result == 'error':
         error = u'Нет данных за выбранный период'
+      else:      
+        return redirect(url_for('download_file', filename = result))
       return redirect(url_for('audit_trail')+'?depart_id='+ depart_id)
    return render_template('select_date_range.html',  title='Audit trail', depart_id = depart_id , action = 'chs', form = form)
 
@@ -612,4 +621,8 @@ def journal_admp():
 
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
+#    fold = app.static_folder+ "\uploads" 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+#    return send_from_directory(fold, filename)
+
+
