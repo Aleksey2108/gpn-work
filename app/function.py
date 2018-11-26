@@ -3,7 +3,7 @@ import os, datetime, webbrowser
 from app import app, db
 from flask import  url_for, redirect
 from app.models import AuditTrail, AuditTrail_CHS, AuditTrail_GO, AuditTrail_PB
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font, Side, NamedStyle
 from flask import send_from_directory
 
@@ -27,6 +27,12 @@ fill_3 = PatternFill(fill_type='solid',
 fill_4 = PatternFill(fill_type='solid',
                    start_color='b8cce4',
                    end_color='b8cce4')
+
+
+fill_5 = PatternFill(fill_type='solid',
+                   start_color='f2f2f2',
+                   end_color='f2f2f2')
+
 
 align_center=Alignment(horizontal='center',
                        vertical='bottom',
@@ -264,283 +270,19 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
     rows =  AuditTrail_CHS.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
     
     if rows:
-      wb = Workbook()
-#      ws1 = wb.active
+#      wb = Workbook()
+      load_filename = '%s/%s'  % (app.config['MASTER_FOLDER'], 'AT_ZNTCHS.xlsx')
+      wb = load_workbook(load_filename)
       ws1 = wb.worksheets[0] 
-      ws1.title = u"Титул"
-      ws1.page_setup.orientation = ws1.ORIENTATION_LANDSCAPE
-      ws1.page_setup.paperSize = ws1.PAPERSIZE_A4
 
-
-      array_1 =[
-          {
-             'cell' : 'A1',         
-             'value' : u'к Приложение № 5',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A2',         
-             'value' : u'к Административному',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A3',         
-             'value' : u'регламенту от 14.06.2016 № 323',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A6',         
-             'value' : u'Министерство Российской Федерации по делам гражданской обороны,',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A7',         
-             'value' : u'чрезвычайным ситуациям и ликвидации последствий стихийных бедствий,',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A9',         
-             'value' : u'ГЛАВНОЕ УПРАВЛЕНИЕ МЧС РОССИИ ПО Г. МОСКВЕ',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A10',         
-             'value' : u'(наименование территориального органа МЧС России)',
-             'alignment' : align_center,
-             'font' : font1
-          },
-          {
-             'cell' : 'A11',         
-             'value' : u'(УПРАВЛЕНИЕ НАДЗОРНОЙ ДЕЯТЕЛЬНОСТИ И ПРОФИЛАКТИЧЕСКОЙ РАБОТЫ)',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A12',         
-             'value' : u'(наименование органа государственного пожарного надзора и адрес места его нахождения)',
-             'alignment' : align_center,
-             'font' : font1
-          },
-          {
-             'cell' : 'A14',         
-             'value' : u'ЖУРНАЛ',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A15',         
-             'value' : u'учета проверок в области ЧС',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A17',         
-             'value' : u'  Начат: "01" января ' + str(start_date.year) + u' года',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A19',         
-             'value' : u'  Окончен: "      " ____________ ' + str(end_date.year) + u' года',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A21',         
-             'value' : u'  На ____ листах *',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A25',         
-             'value' : u'_______________',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A26',         
-             'value' : u'    * Листы журнала должны быть пронумерованы, прошнурованы и скреплены печатью. Журнал должен быть включен в номенклатуру дел территориального органа МЧС России.',
-             'alignment' : align_left,
-             'font' : font1
-          },
-                 ]
-
-      ws1.column_dimensions['A'].width = 170
-      for val in array_1:
-        if 'value' in val:
-           ws1[val['cell']] = val['value']
-        if 'alignment' in val:
-           ws1[val['cell']].alignment = val['alignment']
-        if 'font' in val:
-           ws1[val['cell']].font = val['font']
-
+      ws1['A17'] =  u' Начат: "01" января ' + str(start_date.year) + u' года'
+      ws1['A19'] =  u' Окончен: "      " ____________ ' + str(end_date.year) + u' года'
  
-
-      ws2 = wb.create_sheet(u"Журнал проверок")
       ws2 = wb.worksheets[1] 
-      ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
-      ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
-
-
-      ws2['A2'] = u"№ п/п"
-      ws2['A2'].alignment = align_center1
-      ws2['A2'].font = font5
-      ws2['A2'].border = border
-      ws2['A2'].fill = fill_4
-      ws2['A3'] = 1
-      ws2['A3'].alignment = align_center
-      ws2['A3'].border = border
-      ws2['A3'].fill = fill
-      ws2['B2'] = u"Наименование субьекта надзора"
-      ws2['B2'].alignment = align_center1
-      ws2['B2'].font = font5
-      ws2['B2'].border = border
-      ws2['B2'].fill = fill_4
-      ws2['B3'] = 2
-      ws2['B3'].alignment = align_center
-      ws2['B3'].border = border
-      ws2['B3'].fill = fill
-      ws2['C2'] = u"Адрес фактического осуществления деятельности"
-      ws2['C2'].alignment = align_center1
-      ws2['C2'].font = font5
-      ws2['C2'].border = border
-      ws2['C2'].fill = fill_4
-      ws2['C3'] = 3
-      ws2['C3'].alignment = align_center
-      ws2['C3'].border = border
-      ws2['C3'].fill = fill
-      ws2['D2'] = u"Номер КНД где хранятся документы"
-      ws2['D2'].alignment = align_center1
-      ws2['D2'].font = font5
-      ws2['D2'].border = border
-      ws2['D2'].fill = fill_4
-      ws2['D3'] = 4
-      ws2['D3'].alignment = align_center
-      ws2['D3'].border = border
-      ws2['D3'].fill = fill
-      ws2['E2'] = u"№ и"
-      ws2['E2'].alignment = align_center1
-      ws2['E2'].font = font5
-      ws2['E2'].border = border1
-      ws2['E2'].fill = fill_4
-      ws2['E3'].border = border1
-      ws2['E3'].fill = fill
-      ws2['F2'] = u"дата распоряжения о проведении проверки"
-      ws2['F2'].alignment = align_center1
-      ws2['F2'].font = font5
-      ws2['F2'].border = border2
-      ws2['F2'].fill = fill_4
-      ws2['F3'] = 5
-      ws2['F3'].alignment = align_center
-      ws2['F3'].border = border2
-      ws2['F3'].fill = fill
-      ws2['G2'] = u"Вид проведения проверки (плановая, внеплановая), дата начала и окончания"
-      ws2['G2'].alignment = align_center1
-      ws2['G2'].font = font5
-      ws2['G2'].border = border
-      ws2['G2'].fill = fill_4
-      ws2['G3'].border = border
-      ws2['G3'].fill = fill
-      ws2['H2'] = u"Номер и дата составления акта проверки соблюдения требования в области гражданской обороны"
-      ws2['H2'].alignment = align_center1
-      ws2['H2'].font = font5
-      ws2['H2'].border = border
-      ws2['H2'].fill = fill_4
-      ws2['H3'] = 7
-      ws2['H3'].alignment = align_center
-      ws2['H3'].border = border
-      ws2['H3'].fill = fill
-      ws2['I2'] = u"Номер, дата предписания (предписаний), выданного по результатам мероприятий по надзору"
-      ws2['I2'].alignment = align_center1
-      ws2['I2'].font = font5
-      ws2['I2'].border = border
-      ws2['I2'].fill = fill_4
-      ws2['I3'] = 8
-      ws2['I3'].alignment = align_center
-      ws2['I3'].border = border
-      ws2['I3'].fill = fill
-      ws2['J2'] = u"Выявлено нарушений по результатам проведения плановых и внеплановых проверок"
-      ws2['J2'].alignment = align_center1
-      ws2['J2'].font = font5
-      ws2['J2'].border = border
-      ws2['J2'].fill = fill_4
-      ws2['J3'] = 9
-      ws2['J3'].alignment = align_center
-      ws2['J3'].border = border
-      ws2['J3'].fill = fill
-      ws2['K2'] = u"Выявлено нарушений по результатам внеплановых проверок, которые не устранены в установленные предписаниями сроки. Всего"
-      ws2['K2'].alignment = align_center1
-      ws2['K2'].font = font5
-      ws2['K2'].border = border
-      ws2['K2'].fill = fill_4
-      ws2['K3'] = 10
-      ws2['K3'].alignment = align_center
-      ws2['K3'].border = border
-      ws2['K3'].fill = fill
-      ws2['L2'] = u"Устранено нарушений в установленные предписаниями сроки по результатам внеплановых проверок, всего"
-      ws2['L2'].alignment = align_center1
-      ws2['L2'].font = font5
-      ws2['L2'].border = border
-      ws2['L2'].fill = fill_4
-      ws2['L3'] = 11
-      ws2['L3'].alignment = align_center
-      ws2['L3'].border = border
-      ws2['L3'].fill = fill
-      ws2['M2'] = u"ФИО сотрудника проводившего проверку"
-      ws2['M2'].alignment = align_center1
-      ws2['M2'].font = font5
-      ws2['M2'].border = border
-      ws2['M2'].fill = fill_4
-      ws2['M3'] = 12
-      ws2['M3'].alignment = align_center
-      ws2['M3'].border = border
-      ws2['M3'].fill = fill
-      ws2['N2'] = u"ОТДЕЛ"
-#      ws2['N2'].alignment = align_center1
-      ws2['N2'].alignment = text_vertical
-      ws2['N2'].font = font7
-      ws2['N2'].border = border
-      ws2['N2'].fill = fill_4
-      ws2['N3'] = 13
-      ws2['N3'].alignment = align_center
-      ws2['N3'].border = border
-      ws2['N3'].fill = fill
-      ws2['O2'] = u"№ проверки по АС ЕРП"
-#      ws2['O2'] = '%s \n %s' % (u'№ проверки', u'по ФГИС ЕРП' )
-#      ws2['O2'].alignment = align_center1
-      ws2['O2'].alignment = text_vertical
-      ws2['O2'].font = font6
-      ws2['O2'].border = border
-      ws2['O2'].fill = fill_4
-      ws2['O3'] = 14
-      ws2['O3'].alignment = align_center
-      ws2['O3'].border = border
-      ws2['O3'].fill = fill
-
 
       key = 4
       n_pp =1
-      ws2.column_dimensions['A'].width =5.3
-      ws2.column_dimensions['B'].width =21
-      ws2.column_dimensions['C'].width =21
-      ws2.column_dimensions['D'].width =21
-      ws2.column_dimensions['E'].width =6.8
-      ws2.column_dimensions['F'].width = 13.7
-      ws2.column_dimensions['G'].width = 17
-      ws2.column_dimensions['H'].width = 17
-      ws2.column_dimensions['I'].width = 17
-      ws2.column_dimensions['J'].width = 13.5
-      ws2.column_dimensions['K'].width = 13.5
-      ws2.column_dimensions['L'].width = 13.5
-      ws2.column_dimensions['M'].width = 18.5
-      ws2.column_dimensions['N'].width = 13.5
-      ws2.column_dimensions['O'].width = 18.5
+
       for row in rows:
          ws2.cell(row=key, column=1).value = n_pp
          ws2.cell(row=key, column=1).font = font4
@@ -563,7 +305,7 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
          ws2.cell(row=key, column=5).font = font4
          ws2.cell(row=key, column=5).alignment = align_center1
          ws2.cell(row=key, column=5).border = border1
-         ws2.cell(row=key, column=5).fill = fill
+         ws2.cell(row=key, column=5).fill = fill_5
 
          ws2.cell(row=key, column=6).value = row.checkdate
          ws2.cell(row=key, column=6).font = font4
@@ -604,27 +346,22 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
          ws2.cell(row=key, column=13).value = row.name_employee
          ws2.cell(row=key, column=13).font = font4
          ws2.cell(row=key, column=13).alignment = align_center1
+         ws2.cell(row=key, column=13).fill = fill_1
          ws2.cell(row=key, column=13).border = border
 
 
          ws2.cell(row=key, column=14).value = row.depart_name
          ws2.cell(row=key, column=14).font = font4
          ws2.cell(row=key, column=14).alignment = align_center1
+         ws2.cell(row=key, column=14).fill = fill
          ws2.cell(row=key, column=14).border = border
 
          if row.check_number:
             ws2.cell(row=key, column=15).value = row.check_number
          ws2.cell(row=key, column=15).font = font4
          ws2.cell(row=key, column=15).alignment = align_center1
-         ws2.cell(row=key, column=15).fill = fill_1
+         ws2.cell(row=key, column=15).fill = fill_2
          ws2.cell(row=key, column=15).border = border
-
-
-#         ws2.cell(row=key, column=14).value = row.other_documents
-#         ws2.cell(row=key, column=14).font = font4
-#         ws2.cell(row=key, column=14).alignment = align_center1
-#         ws2.cell(row=key, column=14).border = border
-
 
 
 
@@ -710,292 +447,19 @@ def CreateAuditTrailXls_GO(start_date, end_date):
     rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
     
     if rows:
-      wb = Workbook()
-#      ws1 = wb.active
+      load_filename = '%s/%s'  % (app.config['MASTER_FOLDER'], 'AT_GO.xlsx')
+      wb = load_workbook(load_filename)
       ws1 = wb.worksheets[0] 
-      ws1.title = u"Титул"
-      ws1.page_setup.orientation = ws1.ORIENTATION_LANDSCAPE
-      ws1.page_setup.paperSize = ws1.PAPERSIZE_A4
 
 
-      array_1 =[
-          {
-             'cell' : 'A1',         
-             'value' : u'Приложение № 4',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A2',         
-             'value' : u'к Административному',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A3',         
-             'value' : u'регламенту (п. 26)',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A6',         
-             'value' : u'Министерство Российской Федерации по делам гражданской обороны,',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A7',         
-             'value' : u'чрезвычайным ситуациям и ликвидации последствий стихийных бедствий,',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A9',         
-             'value' : u'ГЛАВНОЕ УПРАВЛЕНИЕ МЧС РОССИИ ПО Г. МОСКВЕ',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A10',         
-             'value' : u'(наименование территориального органа МЧС России)',
-             'alignment' : align_center,
-             'font' : font1
-          },
-          {
-             'cell' : 'A11',         
-             'value' : u'(УПРАВЛЕНИЕ НАДЗОРНОЙ ДЕЯТЕЛЬНОСТИ И ПРОФИЛАКТИЧЕСКОЙ РАБОТЫ)',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A12',         
-             'value' : u'(наименование органа государственного пожарного надзора и адрес места его нахождения)',
-             'alignment' : align_center,
-             'font' : font1
-          },
-          {
-             'cell' : 'A14',         
-             'value' : u'ЖУРНАЛ',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A15',         
-             'value' : u'органа ГПН по учету проверок в области Гражданской обороны',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A17',         
-             'value' : u'  Начат: "01" января ' + str(start_date.year) + u' года',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A19',         
-             'value' : u'  Окончен: "      " ____________ ' + str(end_date.year) + u' года',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A21',         
-             'value' : u'  На ____ листах *',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A25',         
-             'value' : u'_______________',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A26',         
-             'value' : u'    * Листы журнала должны быть пронумерованы, прошнурованы и скреплены печатью. Журнал должен быть включен в номенклатуру дел территориального органа МЧС России.',
-             'alignment' : align_left,
-             'font' : font1
-          },
-                 ]
-
-      ws1.column_dimensions['A'].width = 170
-      for val in array_1:
-        if 'value' in val:
-           ws1[val['cell']] = val['value']
-        if 'alignment' in val:
-           ws1[val['cell']].alignment = val['alignment']
-        if 'font' in val:
-           ws1[val['cell']].font = val['font']
-
+      ws1['A17'] =  u' Начат: "01" января ' + str(start_date.year) + u' года'
+      ws1['A19'] =  u' Окончен: "      " ____________ ' + str(end_date.year) + u' года'
  
-
-      ws2 = wb.create_sheet(u"Журнал проверок")
       ws2 = wb.worksheets[1] 
-      ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
-      ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
-
-#      rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
-      ws2['A2'] = u"№ п/п"
-      ws2['A2'].alignment = align_center1
-      ws2['A2'].font = font5
-      ws2['A2'].border = border
-      ws2['A2'].fill = fill_4
-      ws2['A3'] = 1
-      ws2['A3'].alignment = align_center
-      ws2['A3'].border = border
-      ws2['A3'].fill = fill
-      ws2['B2'] = u"Наименование субьекта надзора"
-      ws2['B2'].alignment = align_center1
-      ws2['B2'].font = font5
-      ws2['B2'].border = border
-      ws2['B2'].fill = fill_4
-      ws2['B3'] = 2
-      ws2['B3'].alignment = align_center
-      ws2['B3'].border = border
-      ws2['B3'].fill = fill
-      ws2['C2'] = u"Адрес фактического осуществления деятельности"
-      ws2['C2'].alignment = align_center1
-      ws2['C2'].font = font5
-      ws2['C2'].border = border
-      ws2['C2'].fill = fill_4
-      ws2['C3'] = 3
-      ws2['C3'].alignment = align_center
-      ws2['C3'].border = border
-      ws2['C3'].fill = fill
-      ws2['D2'] = u"Номер КНД где хранятся документы"
-      ws2['D2'].alignment = align_center1
-      ws2['D2'].font = font5
-      ws2['D2'].border = border
-      ws2['D2'].fill = fill_4
-      ws2['D3'] = 4
-      ws2['D3'].alignment = align_center
-      ws2['D3'].border = border
-      ws2['D3'].fill = fill
-      ws2['E2'] = u"№ и"
-      ws2['E2'].alignment = align_center1
-      ws2['E2'].font = font5
-      ws2['E2'].border = border1
-      ws2['E2'].fill = fill_4
-      ws2['E3'].border = border1
-      ws2['E3'].fill = fill
-      ws2['F2'] = u"дата распоряжения о проведении проверки"
-      ws2['F2'].alignment = align_center1
-      ws2['F2'].font = font5
-      ws2['F2'].border = border2
-      ws2['F2'].fill = fill_4
-      ws2['F3'] = 5
-      ws2['F3'].alignment = align_center
-      ws2['F3'].border = border2
-      ws2['F3'].fill = fill
-      ws2['G2'] = u"Вид проведения проверки (плановая, внеплановая), дата начала и окончания"
-      ws2['G2'].alignment = align_center1
-      ws2['G2'].font = font5
-      ws2['G2'].border = border
-      ws2['G2'].fill = fill_4
-      ws2['G3'].border = border
-      ws2['G3'].fill = fill
-      ws2['H2'] = u"Номер и дата составления акта проверки соблюдения требования в области гражданской обороны"
-      ws2['H2'].alignment = align_center1
-      ws2['H2'].font = font5
-      ws2['H2'].border = border
-      ws2['H2'].fill = fill_4
-      ws2['H3'] = 7
-      ws2['H3'].alignment = align_center
-      ws2['H3'].border = border
-      ws2['H3'].fill = fill
-      ws2['I2'] = u"Номер, дата предписания (предписаний), выданного по результатам мероприятий по надзору"
-      ws2['I2'].alignment = align_center1
-      ws2['I2'].font = font5
-      ws2['I2'].border = border
-      ws2['I2'].fill = fill_4
-      ws2['I3'] = 8
-      ws2['I3'].alignment = align_center
-      ws2['I3'].border = border
-      ws2['I3'].fill = fill
-      ws2['J2'] = u"Выявлено нарушений по результатам проведения плановых и внеплановых проверок"
-      ws2['J2'].alignment = align_center1
-      ws2['J2'].font = font5
-      ws2['J2'].border = border
-      ws2['J2'].fill = fill_4
-      ws2['J3'] = 9
-      ws2['J3'].alignment = align_center
-      ws2['J3'].border = border
-      ws2['J3'].fill = fill
-      ws2['K2'] = u"Выявлено нарушений по результатам внеплановых проверок, которые не устранены в установленные предписаниями сроки. Всего"
-      ws2['K2'].alignment = align_center1
-      ws2['K2'].font = font5
-      ws2['K2'].border = border
-      ws2['K2'].fill = fill_4
-      ws2['K3'] = 10
-      ws2['K3'].alignment = align_center
-      ws2['K3'].border = border
-      ws2['K3'].fill = fill
-      ws2['L2'] = u"Устранено нарушений в установленные предписаниями сроки по результатам внеплановых проверок, всего"
-      ws2['L2'].alignment = align_center1
-      ws2['L2'].font = font5
-      ws2['L2'].border = border
-      ws2['L2'].fill = fill_4
-      ws2['L3'] = 11
-      ws2['L3'].alignment = align_center
-      ws2['L3'].border = border
-      ws2['L3'].fill = fill
-      ws2['M2'] = u"ФИО сотрудника проводившего проверку"
-      ws2['M2'].alignment = align_center1
-      ws2['M2'].font = font5
-      ws2['M2'].border = border
-      ws2['M2'].fill = fill_4
-      ws2['M3'] = 12
-      ws2['M3'].alignment = align_center
-      ws2['M3'].border = border
-      ws2['M3'].fill = fill
-      ws2['N2'] = u"Наименование, № других документов, составленных по результатам проверки, дата их составления"
-      ws2['N2'].alignment = align_center1
-      ws2['N2'].font = font5
-      ws2['N2'].border = border
-      ws2['N2'].fill = fill_4
-      ws2['N3'] = 12
-      ws2['N3'].alignment = align_center
-      ws2['N3'].border = border
-      ws2['N3'].fill = fill
-      ws2['O2'] = u"ОТДЕЛ"
-#      ws2['O2'].alignment = align_center1
-      ws2['O2'].alignment = text_vertical
-      ws2['O2'].font = font7
-      ws2['O2'].border = border
-      ws2['O2'].fill = fill_4
-      ws2['O3'] = 13
-      ws2['O3'].alignment = align_center
-      ws2['O3'].border = border
-      ws2['O3'].fill = fill
-      ws2['P2'] = '%s \n %s' % (u'№ проверки', u'по ФГИС ЕРП' )
-#      ws2['P2'].alignment = align_center1
-      ws2['P2'].alignment = text_vertical
-      ws2['P2'].font = font6
-      ws2['P2'].border = border
-      ws2['P2'].fill = fill_4
-      ws2['P3'] = 14
-      ws2['P3'].alignment = align_center
-      ws2['P3'].border = border
-      ws2['P3'].fill = fill
 
 
       key = 4
       n_pp =1
-      ws2.column_dimensions['A'].width =5.3
-      ws2.column_dimensions['B'].width =21
-      ws2.column_dimensions['C'].width =21
-      ws2.column_dimensions['D'].width =21
-      ws2.column_dimensions['E'].width =6.8
-      ws2.column_dimensions['F'].width = 13.7
-      ws2.column_dimensions['G'].width = 17
-      ws2.column_dimensions['H'].width = 17
-      ws2.column_dimensions['I'].width = 17
-      ws2.column_dimensions['J'].width = 13.5
-      ws2.column_dimensions['K'].width = 13.5
-      ws2.column_dimensions['L'].width = 13.5
-      ws2.column_dimensions['M'].width = 18.5
-      ws2.column_dimensions['N'].width = 16
-      ws2.column_dimensions['O'].width = 13
-      ws2.column_dimensions['P'].width = 19
 
       for row in rows:
          ws2.cell(row=key, column=1).value = n_pp
@@ -1019,7 +483,7 @@ def CreateAuditTrailXls_GO(start_date, end_date):
          ws2.cell(row=key, column=5).font = font4
          ws2.cell(row=key, column=5).alignment = align_center1
          ws2.cell(row=key, column=5).border = border1
-         ws2.cell(row=key, column=5).fill = fill
+         ws2.cell(row=key, column=5).fill = fill_5
 
          ws2.cell(row=key, column=6).value = row.checkdate
          ws2.cell(row=key, column=6).font = font4
@@ -1060,6 +524,7 @@ def CreateAuditTrailXls_GO(start_date, end_date):
          ws2.cell(row=key, column=13).value = row.name_employee
          ws2.cell(row=key, column=13).font = font4
          ws2.cell(row=key, column=13).alignment = align_center1
+         ws2.cell(row=key, column=13).fill = fill_1
          ws2.cell(row=key, column=13).border = border
 
          ws2.cell(row=key, column=14).value = row.other_documents
@@ -1071,13 +536,14 @@ def CreateAuditTrailXls_GO(start_date, end_date):
          ws2.cell(row=key, column=15).value = row.depart_name
          ws2.cell(row=key, column=15).font = font4
          ws2.cell(row=key, column=15).alignment = align_center1
+         ws2.cell(row=key, column=15).fill = fill
          ws2.cell(row=key, column=15).border = border
 
          if row.check_number:
             ws2.cell(row=key, column=16).value = row.check_number
          ws2.cell(row=key, column=16).font = font4
          ws2.cell(row=key, column=16).alignment = align_center1
-         ws2.cell(row=key, column=16).fill = fill_1
+         ws2.cell(row=key, column=16).fill = fill_2
          ws2.cell(row=key, column=16).border = border
 
 
@@ -1162,292 +628,19 @@ def CreateAuditTrailXls_PB(start_date, end_date):
     rows =  AuditTrail_PB.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
     
     if rows:
-      wb = Workbook()
-#      ws1 = wb.active
+      load_filename = '%s/%s'  % (app.config['MASTER_FOLDER'], 'AT_GO.xlsx')
+      wb = load_workbook(load_filename)
       ws1 = wb.worksheets[0] 
-      ws1.title = u"Титул"
-      ws1.page_setup.orientation = ws1.ORIENTATION_LANDSCAPE
-      ws1.page_setup.paperSize = ws1.PAPERSIZE_A4
 
 
-      array_1 =[
-          {
-             'cell' : 'A1',         
-             'value' : u'Приложение № 4',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A2',         
-             'value' : u'к Административному',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A3',         
-             'value' : u'регламенту (п. 26)',
-             'alignment' : align_right,
-             'font' : font1
-          },
-          {
-             'cell' : 'A6',         
-             'value' : u'Министерство Российской Федерации по делам гражданской обороны,',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A7',         
-             'value' : u'чрезвычайным ситуациям и ликвидации последствий стихийных бедствий,',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A9',         
-             'value' : u'ГЛАВНОЕ УПРАВЛЕНИЕ МЧС РОССИИ ПО Г. МОСКВЕ',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A10',         
-             'value' : u'(наименование территориального органа МЧС России)',
-             'alignment' : align_center,
-             'font' : font1
-          },
-          {
-             'cell' : 'A11',         
-             'value' : u'(УПРАВЛЕНИЕ НАДЗОРНОЙ ДЕЯТЕЛЬНОСТИ И ПРОФИЛАКТИЧЕСКОЙ РАБОТЫ)',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A12',         
-             'value' : u'(наименование органа государственного пожарного надзора и адрес места его нахождения)',
-             'alignment' : align_center,
-             'font' : font1
-          },
-          {
-             'cell' : 'A14',         
-             'value' : u'ЖУРНАЛ',
-             'alignment' : align_center,
-             'font' : font3
-          },
-          {
-             'cell' : 'A15',         
-             'value' : u'органа ГПН по учету проверок в области Гражданской обороны',
-             'alignment' : align_center,
-             'font' : font2
-          },
-          {
-             'cell' : 'A17',         
-             'value' : u'  Начат: "01" января ' + str(start_date.year) + u' года',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A19',         
-             'value' : u'  Окончен: "      " ____________ ' + str(end_date.year) + u' года',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A21',         
-             'value' : u'  На ____ листах *',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A25',         
-             'value' : u'_______________',
-             'alignment' : align_left,
-             'font' : font1
-          },
-          {
-             'cell' : 'A26',         
-             'value' : u'    * Листы журнала должны быть пронумерованы, прошнурованы и скреплены печатью. Журнал должен быть включен в номенклатуру дел территориального органа МЧС России.',
-             'alignment' : align_left,
-             'font' : font1
-          },
-                 ]
-
-      ws1.column_dimensions['A'].width = 170
-      for val in array_1:
-        if 'value' in val:
-           ws1[val['cell']] = val['value']
-        if 'alignment' in val:
-           ws1[val['cell']].alignment = val['alignment']
-        if 'font' in val:
-           ws1[val['cell']].font = val['font']
-
+      ws1['A17'] =  u' Начат: "01" января ' + str(start_date.year) + u' года'
+      ws1['A19'] =  u' Окончен: "      " ____________ ' + str(end_date.year) + u' года'
  
-
-      ws2 = wb.create_sheet(u"Журнал проверок")
       ws2 = wb.worksheets[1] 
-      ws2.page_setup.orientation = ws2.ORIENTATION_LANDSCAPE
-      ws2.page_setup.paperSize = ws2.PAPERSIZE_A4
-
-
-      ws2['A2'] = u"№ п/п"
-      ws2['A2'].alignment = align_center1
-      ws2['A2'].font = font5
-      ws2['A2'].border = border
-      ws2['A2'].fill = fill_4
-      ws2['A3'] = 1
-      ws2['A3'].alignment = align_center
-      ws2['A3'].border = border
-      ws2['A3'].fill = fill
-      ws2['B2'] = u"Наименование субьекта надзора"
-      ws2['B2'].alignment = align_center1
-      ws2['B2'].font = font5
-      ws2['B2'].border = border
-      ws2['B2'].fill = fill_4
-      ws2['B3'] = 2
-      ws2['B3'].alignment = align_center
-      ws2['B3'].border = border
-      ws2['B3'].fill = fill
-      ws2['C2'] = u"Адрес фактического осуществления деятельности"
-      ws2['C2'].alignment = align_center1
-      ws2['C2'].font = font5
-      ws2['C2'].border = border
-      ws2['C2'].fill = fill_4
-      ws2['C3'] = 3
-      ws2['C3'].alignment = align_center
-      ws2['C3'].border = border
-      ws2['C3'].fill = fill
-      ws2['D2'] = u"Номер КНД где хранятся документы"
-      ws2['D2'].alignment = align_center1
-      ws2['D2'].font = font5
-      ws2['D2'].border = border
-      ws2['D2'].fill = fill_4
-      ws2['D3'] = 4
-      ws2['D3'].alignment = align_center
-      ws2['D3'].border = border
-      ws2['D3'].fill = fill
-      ws2['E2'] = u"№ и"
-      ws2['E2'].alignment = align_center1
-      ws2['E2'].font = font5
-      ws2['E2'].border = border1
-      ws2['E2'].fill = fill_4
-      ws2['E3'].border = border1
-      ws2['E3'].fill = fill
-      ws2['F2'] = u"дата распоряжения о проведении проверки"
-      ws2['F2'].alignment = align_center1
-      ws2['F2'].font = font5
-      ws2['F2'].border = border2
-      ws2['F2'].fill = fill_4
-      ws2['F3'] = 5
-      ws2['F3'].alignment = align_center
-      ws2['F3'].border = border2
-      ws2['F3'].fill = fill
-      ws2['G2'] = u"Вид проведения проверки (плановая, внеплановая), дата начала и окончания"
-      ws2['G2'].alignment = align_center1
-      ws2['G2'].font = font5
-      ws2['G2'].border = border
-      ws2['G2'].fill = fill_4
-      ws2['G3'].border = border
-      ws2['G3'].fill = fill
-      ws2['H2'] = u"Номер и дата составления акта проверки соблюдения требования в области гражданской обороны"
-      ws2['H2'].alignment = align_center1
-      ws2['H2'].font = font5
-      ws2['H2'].border = border
-      ws2['H2'].fill = fill_4
-      ws2['H3'] = 7
-      ws2['H3'].alignment = align_center
-      ws2['H3'].border = border
-      ws2['H3'].fill = fill
-      ws2['I2'] = u"Номер, дата предписания (предписаний), выданного по результатам мероприятий по надзору"
-      ws2['I2'].alignment = align_center1
-      ws2['I2'].font = font5
-      ws2['I2'].border = border
-      ws2['I2'].fill = fill_4
-      ws2['I3'] = 8
-      ws2['I3'].alignment = align_center
-      ws2['I3'].border = border
-      ws2['I3'].fill = fill
-      ws2['J2'] = u"Выявлено нарушений по результатам проведения плановых и внеплановых проверок"
-      ws2['J2'].alignment = align_center1
-      ws2['J2'].font = font5
-      ws2['J2'].border = border
-      ws2['J2'].fill = fill_4
-      ws2['J3'] = 9
-      ws2['J3'].alignment = align_center
-      ws2['J3'].border = border
-      ws2['J3'].fill = fill
-      ws2['K2'] = u"Выявлено нарушений по результатам внеплановых проверок, которые не устранены в установленные предписаниями сроки. Всего"
-      ws2['K2'].alignment = align_center1
-      ws2['K2'].font = font5
-      ws2['K2'].border = border
-      ws2['K2'].fill = fill_4
-      ws2['K3'] = 10
-      ws2['K3'].alignment = align_center
-      ws2['K3'].border = border
-      ws2['K3'].fill = fill
-      ws2['L2'] = u"Устранено нарушений в установленные предписаниями сроки по результатам внеплановых проверок, всего"
-      ws2['L2'].alignment = align_center1
-      ws2['L2'].font = font5
-      ws2['L2'].border = border
-      ws2['L2'].fill = fill_4
-      ws2['L3'] = 11
-      ws2['L3'].alignment = align_center
-      ws2['L3'].border = border
-      ws2['L3'].fill = fill
-      ws2['M2'] = u"ФИО сотрудника проводившего проверку"
-      ws2['M2'].alignment = align_center1
-      ws2['M2'].font = font5
-      ws2['M2'].border = border
-      ws2['M2'].fill = fill_4
-      ws2['M3'] = 12
-      ws2['M3'].alignment = align_center
-      ws2['M3'].border = border
-      ws2['M3'].fill = fill
-      ws2['N2'] = u"Наименование, № других документов, составленных по результатам проверки, дата их составления"
-      ws2['N2'].alignment = align_center1
-      ws2['N2'].font = font5
-      ws2['N2'].border = border
-      ws2['N2'].fill = fill_4
-      ws2['N3'] = 12
-      ws2['N3'].alignment = align_center
-      ws2['N3'].border = border
-      ws2['N3'].fill = fill
-      ws2['O2'] = u"ОТДЕЛ"
-#      ws2['O2'].alignment = align_center1
-      ws2['O2'].alignment = text_vertical
-      ws2['O2'].font = font7
-      ws2['O2'].border = border
-      ws2['O2'].fill = fill_4
-      ws2['O3'] = 13
-      ws2['O3'].alignment = align_center
-      ws2['O3'].border = border
-      ws2['O3'].fill = fill
-      ws2['P2'] = '%s \n %s' % (u'№ проверки', u'по ФГИС ЕРП' )
-#      ws2['P2'].alignment = align_center1
-      ws2['P2'].alignment = text_vertical
-      ws2['P2'].font = font6
-      ws2['P2'].border = border
-      ws2['P2'].fill = fill_4
-      ws2['P3'] = 14
-      ws2['P3'].alignment = align_center
-      ws2['P3'].border = border
-      ws2['P3'].fill = fill
 
 
       key = 4
       n_pp =1
-      ws2.column_dimensions['A'].width =5.3
-      ws2.column_dimensions['B'].width =21
-      ws2.column_dimensions['C'].width =21
-      ws2.column_dimensions['D'].width =21
-      ws2.column_dimensions['E'].width =6.8
-      ws2.column_dimensions['F'].width = 13.7
-      ws2.column_dimensions['G'].width = 17
-      ws2.column_dimensions['H'].width = 17
-      ws2.column_dimensions['I'].width = 17
-      ws2.column_dimensions['J'].width = 13.5
-      ws2.column_dimensions['K'].width = 13.5
-      ws2.column_dimensions['L'].width = 13.5
-      ws2.column_dimensions['M'].width = 18.5
-      ws2.column_dimensions['N'].width = 16
-      ws2.column_dimensions['O'].width = 13
-      ws2.column_dimensions['P'].width = 19
 
       for row in rows:
          ws2.cell(row=key, column=1).value = n_pp
@@ -1471,7 +664,7 @@ def CreateAuditTrailXls_PB(start_date, end_date):
          ws2.cell(row=key, column=5).font = font4
          ws2.cell(row=key, column=5).alignment = align_center1
          ws2.cell(row=key, column=5).border = border1
-         ws2.cell(row=key, column=5).fill = fill
+         ws2.cell(row=key, column=5).fill = fill_5
 
          ws2.cell(row=key, column=6).value = row.checkdate
          ws2.cell(row=key, column=6).font = font4
@@ -1512,6 +705,7 @@ def CreateAuditTrailXls_PB(start_date, end_date):
          ws2.cell(row=key, column=13).value = row.name_employee
          ws2.cell(row=key, column=13).font = font4
          ws2.cell(row=key, column=13).alignment = align_center1
+         ws2.cell(row=key, column=13).fill = fill_1
          ws2.cell(row=key, column=13).border = border
 
          ws2.cell(row=key, column=14).value = row.other_documents
@@ -1523,13 +717,14 @@ def CreateAuditTrailXls_PB(start_date, end_date):
          ws2.cell(row=key, column=15).value = row.depart_name
          ws2.cell(row=key, column=15).font = font4
          ws2.cell(row=key, column=15).alignment = align_center1
+         ws2.cell(row=key, column=15).fill = fill
          ws2.cell(row=key, column=15).border = border
 
          if row.check_number:
             ws2.cell(row=key, column=16).value = row.check_number
          ws2.cell(row=key, column=16).font = font4
          ws2.cell(row=key, column=16).alignment = align_center1
-         ws2.cell(row=key, column=16).fill = fill_1
+         ws2.cell(row=key, column=16).fill = fill_2
          ws2.cell(row=key, column=16).border = border
 
 
@@ -1595,6 +790,7 @@ def CreateAuditTrailXls_PB(start_date, end_date):
       ws2.cell(row=cell_num, column=15).border = border
       ws2.cell(row=cell_num, column=16).fill = fill_3
       ws2.cell(row=cell_num, column=16).border = border
+
 
       now = datetime.datetime.now()
 

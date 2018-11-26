@@ -2,7 +2,6 @@
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 import os, datetime
 from app import app, db
-# from app.xls_gen import ProfTheEventXml
 from app.function import GetDepartment, GetLastDay, CheckLastDay, CreateAuditTrailXls_CHS, CreateAuditTrailXls_GO, CreateAuditTrailXls_PB
 from app.forms import AuditTrailForm, AuditTrailFormCHS, AuditTrailFormPB, AuditTrailFormGO, SelectDateRangeShort
 from app.models import AuditTrail, AuditTrail_CHS, AuditTrail_GO, AuditTrail_PB
@@ -352,7 +351,7 @@ def add_audit_trail_go():
                of_violations = form.of_violations.data,
                of_violations_unscheduled = form.of_violations_unscheduled.data,
                fixed_violations = form.fixed_violations.data,
-               name_employee = u'Иванов Иван',
+               name_employee = form.name_employee.data,
                other_documents = form.other_documents.data,
                check_number =  form.check_number.data,
                depart_name = GetDepartment(depart_id),
@@ -361,7 +360,8 @@ def add_audit_trail_go():
              db.session.commit()
 
              flash(u'Запись сохранена.')
-             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
+#             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
+             return redirect(url_for('add_audit_trail_go')+'?depart_id='+ depart_id)
      return render_template('audit_trail_GO_form.html',  title='Audit trail', depart_id = depart_id , form = form)
 
 @app.route('/load-audit-trail-go', methods=['GET', 'POST'])
@@ -441,7 +441,7 @@ def add_audit_trail_pb():
                of_violations = form.of_violations.data,
                of_violations_unscheduled = form.of_violations_unscheduled.data,
                fixed_violations = form.fixed_violations.data,
-               name_employee = u'Иванов Иван',
+               name_employee = form.name_employee.data,
                other_documents = form.other_documents.data,
                check_number =  form.check_number.data,
                depart_name = GetDepartment(depart_id),
@@ -531,7 +531,7 @@ def add_audit_trail_chs():
                of_violations = form.of_violations.data,
                of_violations_unscheduled = form.of_violations_unscheduled.data,
                fixed_violations = form.fixed_violations.data,
-               name_employee = u'Иванов Иван',
+               name_employee = form.name_employee.data,
                check_number =  form.check_number.data,
                depart_name = GetDepartment(depart_id)
              )
