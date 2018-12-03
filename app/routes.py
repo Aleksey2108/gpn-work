@@ -461,7 +461,8 @@ def add_audit_trail_pb():
              db.session.commit()
 
              flash(u'Запись сохранена.')
-             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
+#             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
+             return redirect(url_for('add_audit_trail_pb')+'?depart_id='+ depart_id)
 
      rows =  AuditTrail_PB.query.filter(AuditTrail_PB.depart_id == depart_id).all()
      if len(rows) <=7:
@@ -561,7 +562,8 @@ def add_audit_trail_chs():
              db.session.commit()
 
              flash(u'Запись сохранена.')
-             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
+#             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
+             return redirect(url_for('add_audit_trail_chs')+'?depart_id='+ depart_id)
 
      rows =  AuditTrail_CHS.query.filter(AuditTrail_CHS.depart_id == depart_id).all()
      if len(rows) <=7:
