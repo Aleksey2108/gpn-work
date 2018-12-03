@@ -1,8 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="content_header">
+    <h1>Журнал проверок ГО</h1>
+         {% if lines %}
+          <br> Ранее введенные данные:
+          <br>
+           <table border="1" width="100%" class="preview_data">
+            <tr>
+             <th width = 230px>Наименование субьекта</th>
+             <th width = 250px align="center">Адрес</th>
+             <th width = 105px align="center">Вид и дата</th>
+             <th width = 105px align="center">Номер и дата акта</th>
+             <th width = 105px align="center">Номер, дата предписания</th>
+             <th width = 210px align="center">ФИО сотрудника</th>
+           </tr>
+            {% for line in lines %}
+              <tr>
+               <td>{{ line.objectname }}</td>
+               <td>{{ line.objectadres }}</td>
+               <td align="center">{{ line.type_inspection}}<br>{{ line.start_date }}<br>{{ line.end_date }}</td>
+               <td align="center">{% if line.act_number%}{{ line.act_number}}<br>{{ line.act_date }} {% endif %}</td>
+               <td align="center">{% if line.order_number%}{{ line.order_number}}<br>{{ line.order_date }} {% endif %}</td>
+               <td>{{ line.name_employee }}</td>
+
+              </tr>
+            {% endfor %}
+           </table>
+          <br><br>
+    <h3>Ведите новые данные о проверке:</h3>
+         {% endif %}
+</div>
 <div class="content_2">
-    <h1>Журнал проверок ЧС</h1>
     <form action="/add-audit-trail-go" method="post">
      <input type="hidden" name="depart_id" value="{{depart_id}}" />
     {{form.hidden_tag()}}

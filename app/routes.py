@@ -362,7 +362,18 @@ def add_audit_trail_go():
              flash(u'Запись сохранена.')
 #             return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
              return redirect(url_for('add_audit_trail_go')+'?depart_id='+ depart_id)
-     return render_template('audit_trail_GO_form.html',  title='Audit trail', depart_id = depart_id , form = form)
+   
+     rows =  AuditTrail_GO.query.filter(AuditTrail_GO.depart_id == depart_id).all()
+     if len(rows) <=7:
+       lines = rows
+     else:
+       lines =[]
+       for ind, val in enumerate(rows): 
+          if  ind < len(rows)-7:
+             continue       
+          lines.append(val)
+
+     return render_template('audit_trail_GO_form.html',  title='Audit trail', depart_id = depart_id ,lines = lines, form = form)
 
 @app.route('/load-audit-trail-go', methods=['GET', 'POST'])
 def load_audit_trail_go():
@@ -451,7 +462,18 @@ def add_audit_trail_pb():
 
              flash(u'Запись сохранена.')
              return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
-     return render_template('audit_trail_PB_form.html',  title='Audit trail', depart_id = depart_id , form = form)
+
+     rows =  AuditTrail_PB.query.filter(AuditTrail_PB.depart_id == depart_id).all()
+     if len(rows) <=7:
+       lines = rows
+     else:
+       lines =[]
+       for ind, val in enumerate(rows): 
+          if  ind < len(rows)-7:
+             continue       
+          lines.append(val)
+
+     return render_template('audit_trail_PB_form.html',  title='Audit trail', depart_id = depart_id , lines = lines, form = form)
 
 @app.route('/load-audit-trail-pb', methods=['GET', 'POST'])
 def load_audit_trail_pb():
@@ -540,7 +562,18 @@ def add_audit_trail_chs():
 
              flash(u'Запись сохранена.')
              return redirect(url_for('audit_trail_sel')+'?depart_id='+ depart_id)
-     return render_template('audit_trail_CHS_form.html',  title='Audit trail', depart_id = depart_id , form = form)
+
+     rows =  AuditTrail_CHS.query.filter(AuditTrail_CHS.depart_id == depart_id).all()
+     if len(rows) <=7:
+       lines = rows
+     else:
+       lines =[]
+       for ind, val in enumerate(rows): 
+          if  ind < len(rows)-7:
+             continue       
+          lines.append(val)
+
+     return render_template('audit_trail_CHS_form.html',  title='Audit trail', depart_id = depart_id , lines = lines,  form = form)
 
 
 @app.route('/load-audit-trail-chs', methods=['GET', 'POST'])

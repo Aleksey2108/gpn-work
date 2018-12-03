@@ -267,7 +267,7 @@ def CheckLastDay(day, month, year):
 def CreateAuditTrailXls_CHS(start_date, end_date):
 
 # !!  В запрос необходимо добавить условие выбора по отделу !!
-    rows =  AuditTrail_CHS.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+    rows =  AuditTrail_CHS.query.filter(start_date <= AuditTrail_CHS.checkdate,  AuditTrail_CHS.checkdate <= end_date).all()
     
     if rows:
 #      wb = Workbook()
@@ -444,7 +444,7 @@ def CreateAuditTrailXls_CHS(start_date, end_date):
 def CreateAuditTrailXls_GO(start_date, end_date):
 
 # !!  В запрос необходимо добавить условие выбора по отделу !! 
-    rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+    rows =  AuditTrail_GO.query.filter(start_date <= AuditTrail_GO.checkdate,  AuditTrail_GO.checkdate <= end_date).all()
     
     if rows:
       load_filename = '%s/%s'  % (app.config['MASTER_FOLDER'], 'AT_GO.xlsx')
@@ -625,7 +625,7 @@ def CreateAuditTrailXls_GO(start_date, end_date):
 def CreateAuditTrailXls_PB(start_date, end_date):
 
 # !!  В запрос необходимо добавить условие выбора по отделу !! 
-    rows =  AuditTrail_PB.query.filter(start_date <= AuditTrail.checkdate,  AuditTrail.checkdate <= end_date).all()
+    rows =  AuditTrail_PB.query.filter(start_date <= AuditTrail_PB.checkdate,  AuditTrail_PB.checkdate <= end_date).all()
     
     if rows:
       load_filename = '%s/%s'  % (app.config['MASTER_FOLDER'], 'AT_GO.xlsx')
