@@ -10,20 +10,31 @@
             <tr>
              <th width = 230px>Наименование субьекта</th>
              <th width = 250px align="center">Адрес</th>
+             <th width = 105px align="center">Номер КНД</th>
+             <th width = 105px align="center">Дата распоряжения</th>
              <th width = 105px align="center">Вид и дата</th>
              <th width = 105px align="center">Номер и дата акта</th>
              <th width = 105px align="center">Номер, дата предписания</th>
+             <th width = 105px align="center">Выявлено нарушений</th>
+             <th width = 105px align="center">Не устранены в установленные сроки</th>
+             <th width = 105px align="center">Устранено нарушений</th>
              <th width = 210px align="center">ФИО сотрудника</th>
+             <th width = 105px align="center">№ по ФГИС ЕРП</th>
            </tr>
             {% for line in lines %}
               <tr>
                <td>{{ line.objectname }}</td>
                <td>{{ line.objectadres }}</td>
+               <td align="center">{% if line.doc_stored%}{{ line.doc_stored}}{% endif %}</td>
+               <td align="center">{% if line.checkdate%}{{ line.checkdate}} {% endif %}</td>
                <td align="center">{{ line.type_inspection}}<br>{{ line.start_date }}<br>{{ line.end_date }}</td>
                <td align="center">{% if line.act_number%}{{ line.act_number}}<br>{{ line.act_date }} {% endif %}</td>
                <td align="center">{% if line.order_number%}{{ line.order_number}}<br>{{ line.order_date }} {% endif %}</td>
+               <td align="center">{% if line.of_violations%}{{ line.of_violations}}{% endif %}</td>
+               <td align="center">{% if line.of_violations_unscheduled%}{{ line.of_violations_unscheduled}}{% endif %}</td>
+               <td align="center">{% if line.fixed_violations%}{{ line.fixed_violations}}{% endif %}</td>
                <td>{{ line.name_employee }}</td>
-
+               <td align="center">{% if line.check_number%}{{ line.check_number}}{% endif %}</td>
               </tr>
             {% endfor %}
            </table>
